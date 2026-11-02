@@ -49,8 +49,8 @@ type AppManifest = {
   Storage names are platform-derived from the app id + binding name, so keep binding names
   short — very long ones fail the publish — and treat them as permanent: renaming a
   binding points the app at a fresh, empty resource
-- Optional `backend/migrations/*.sql` requires a `database` binding — see
-  [d1-migrations.md](d1-migrations.md)
+- Optional `backend/migrations/*.sql` requires a `database` binding. Migrations are additive
+  and forward-only — see [d1-migrations.md](d1-migrations.md)
 - Optional `backend.schedules` run on the **published app only** (draft cron stays off): name
   `[a-z0-9-]{1,32}` unique, `everySeconds` 300–86400, payload ≤4KB, max 5 — handled via
   `createHandler({ jobs })`; a published deployment replaces the published set wholesale (no

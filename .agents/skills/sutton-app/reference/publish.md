@@ -100,7 +100,7 @@ must remain in the published zip so the app can be restored for a later iteratio
 Call `appPublish` with `appId` and `appPublishId` (the upload-link `id`) until the state is
 `succeeded` or `failed`. Intermediate states include `queued`, `validating`,
 `deployingBackend`, and `publishingBundle`. During `deployingBackend`, Digit applies pending
-migrations — see [d1-migrations.md](d1-migrations.md).
+migrations. They must be additive and forward-only — see [d1-migrations.md](d1-migrations.md).
 
 For a draft, a succeeded row means the owner can open the draft environment; it does not
 mean the published app changed. For a publish to the published app or a later promotion, the published app changes
