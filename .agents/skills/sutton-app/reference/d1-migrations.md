@@ -62,8 +62,9 @@ these. Check every new migration yourself before you publish.
 **Fix a bad migration** by writing a new forward migration. Never edit or delete an applied
 migration file.
 
-**Clean up later (contract step):** drop unused columns or tables in a later migration, only
-once no rollback target still reads or writes them.
+**Clean up later (contract step):** drop unused columns or tables in a later migration, after
+the current code has stopped reading and writing them. Ask the user first: once the drop is
+applied, rolling back to any version that still uses them will break.
 
 **SQLite:** there is no `ALTER COLUMN`. Type or constraint changes need a table rebuild,
 which drops and renames tables, so it is **not allowed** either. Add a new column instead.
