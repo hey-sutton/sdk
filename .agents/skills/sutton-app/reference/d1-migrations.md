@@ -3,7 +3,7 @@
 Digit applies `backend/migrations/*.sql` during a platform deployment — not when the app
 handles requests, not during local dev, and not as a separate manual step. A draft deploy
 applies migrations to the draft D1. Promotion applies the build's pending migrations to the
-the published D1; a draft deploy never migrates published data.
+published D1; a draft deploy never migrates published data.
 
 ## Workflow
 
@@ -50,12 +50,14 @@ App D1 migrations are forward-only. There are no down or undo files. Rolling bac
 version runs older code against the newer schema, so every applied migration has to keep
 working for any version you might roll back to.
 
-**Allowed:** new tables, new columns that are nullable or have a default, new indexes, and
-data backfills.
+**Allowed:** new tables, new columns that are nullable or have a default, new non-unique
+indexes, and backfills that only fill new columns. Write `INSERT` statements with an
+explicit column list so later added columns don't break them.
 
 **Not allowed** while any version you might roll back to still uses the old shape:
-`DROP TABLE`, `ALTER TABLE ... DROP COLUMN`, and `RENAME` of tables or columns. Publish will
-flag destructive migrations, and the versions page will warn about them.
+`DROP TABLE`, `ALTER TABLE ... DROP COLUMN`, `RENAME` of tables or columns, new `UNIQUE`
+indexes, and backfills that rewrite values older code reads. Do not rely on publish to catch
+these. Check every new migration yourself before you publish.
 
 **Fix a bad migration** by writing a new forward migration. Never edit or delete an applied
 migration file.
@@ -63,8 +65,8 @@ migration file.
 **Clean up later (contract step):** drop unused columns or tables in a later migration, only
 once no rollback target still reads or writes them.
 
-**SQLite:** there is no `ALTER COLUMN`. Type or constraint changes need a table rebuild, so
-prefer adding a new column instead.
+**SQLite:** there is no `ALTER COLUMN`. Type or constraint changes need a table rebuild,
+which drops and renames tables, so it is **not allowed** either. Add a new column instead.
 
 Good — add a nullable column the previous version can ignore:
 
