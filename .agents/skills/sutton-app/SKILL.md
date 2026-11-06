@@ -229,6 +229,10 @@ Some lack `packages/lib-common`; the starter's private `packages/lib-common` shi
   sort, filter, or connection/page inputs, use those — do not fetch a full list and
   sort/filter client-side when the API can do it. Confirm arg names via
   `graphql-schema://…`.
+- **Fetch records in bulk, not one by one:** Never call a single-record query (`item`,
+  `order`, …) in a loop. Use the list query with its id filter (e.g. `items(itemIds: […])`)
+  in one request. Requests are rate-limited per user session (60 a minute by default), so a
+  loop over a list's rows fails as soon as the list grows.
 - **Backend:** `useBackendQuery` / `useBackendMutation` — do not hand-roll `/proxy/backend`.
 - **Errors:** pair a hook's `error` with `AppErrorAlert` (`onRetry` when retryable) — do not
   branch on `AppErrorCode` in UI.
