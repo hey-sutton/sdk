@@ -230,6 +230,12 @@ Some lack `packages/lib-common`; the starter's private `packages/lib-common` shi
   sort/filter client-side when the API can do it. Confirm arg names via
   `graphql-schema://…`.
 - **Backend:** `useBackendQuery` / `useBackendMutation` — do not hand-roll `/proxy/backend`.
+- **Request limits (hard):** 250KB request bodies, 5MB / 10s backend responses, and 60
+  requests per minute per user session across all API and backend calls. Store files in a
+  `bucket` binding, never as `data:` URLs in D1, and never chunk, throttle or retry your way
+  around a limit. Read
+  [reference/proxy-and-api.md#request-limits](reference/proxy-and-api.md#request-limits)
+  before designing anything that stores images or files, or saves in bulk.
 - **Errors:** pair a hook's `error` with `AppErrorAlert` (`onRetry` when retryable) — do not
   branch on `AppErrorCode` in UI.
 
