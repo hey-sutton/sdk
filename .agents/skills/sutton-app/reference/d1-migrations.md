@@ -48,7 +48,9 @@ completing the deployment does not apply any SQL.
 
 App D1 migrations are forward-only. There are no down or undo files. Rolling back an app
 version runs older code against the newer schema, so every applied migration has to keep
-working for any version you might roll back to.
+working for any version you might roll back to. See
+[Roll back to an earlier version](publish.md#roll-back-to-an-earlier-version) for how a rollback
+works.
 
 **Allowed:** new tables, new columns that are nullable or have a default, new non-unique
 indexes, and backfills that only fill new columns. Write `INSERT` statements with an

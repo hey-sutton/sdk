@@ -120,6 +120,25 @@ stays on the promote row as an operator recovery aid.
 On failure, report the returned `error`, fix the app, repack, and start a fresh upload. Each
 upload is single-use.
 
+## Roll back to an earlier version
+
+Rolling back puts an earlier build's code back on the published app. It does not roll back the
+database.
+
+1. Ask the user which version to restore, then call `appPublish` with that build's publish id to
+   get its `downloadUrl`. GET the zip yourself. `downloadUrl` is null when no zip was kept for
+   that build, and then it can't be restored.
+2. Republish that zip unchanged through the upload flow above: `generateAppUploadLink`, upload,
+   `publishApp`. Deploy it as a draft (`channel: "preview"`) so the user can check it and
+   promote it, unless they ask to publish it straight to the published app.
+
+Migrations only move forward. The earlier zip carries earlier migration files, which are already
+recorded as applied, so nothing runs and the published database keeps the newer schema. The
+older code then runs against that schema, which is why every migration must be
+[additive](d1-migrations.md#additive-only-migrations). Before you publish the rollback, check the
+migrations added since that version. If one drops or renames a table or column the older code
+uses, tell the user the rollback will break the app.
+
 ## Zip validation reminders
 
 - `manifest.json` at the zip root and `frontend/index.js`
