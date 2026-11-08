@@ -231,8 +231,8 @@ Some lack `packages/lib-common`; the starter's private `packages/lib-common` shi
   `graphql-schema://…`.
 - **Fetch records in bulk, not one by one:** Never call a single-record query (`item`,
   `order`, …) in a loop. Use the list query with its id filter (e.g. `items(itemIds: […])`)
-  in one request. Requests are rate-limited per user session (60 a minute by default), so a
-  loop over a list's rows fails as soon as the list grows.
+  in one request. A loop over a list's rows runs into the per-session rate limit (see
+  **Request limits** below) as soon as the list grows.
 - **Backend:** `useBackendQuery` / `useBackendMutation` — do not hand-roll `/proxy/backend`.
 - **Request limits (hard):** 250KB request bodies, 5MB / 10s backend responses, and 60
   requests per minute per user session across all API and backend calls. Store files in a

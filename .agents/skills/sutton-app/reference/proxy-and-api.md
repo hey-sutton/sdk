@@ -71,8 +71,7 @@ Fetch related records in one request. When a screen needs details for many recor
 item on an order or project, say), pass their ids to the list query's id filter, e.g.
 `items(itemIds: […])`, instead of calling `item` once per id. The index shows a list query's
 id filter as `items(itemIds?)`, and each single-record query names the list query to use.
-Single-record queries are for one record's full details. The proxy allows 60 requests a minute
-per user session and 600 per app by default, and returns 429 past that.
+Single-record queries are for one record's full details. See [Request limits](#request-limits).
 
 ## Digit GraphQL API
 
