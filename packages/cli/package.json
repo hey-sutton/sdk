@@ -1,6 +1,6 @@
 {
   "name": "@heysutton/cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "sutton CLI for Sutton custom apps: `sutton studio pack` builds with Vite and writes app.zip",
   "license": "MIT",
   "type": "module",
