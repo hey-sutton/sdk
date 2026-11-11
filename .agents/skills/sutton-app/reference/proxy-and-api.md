@@ -117,13 +117,16 @@ export default createHandler({
 });
 ```
 
-### Request limits
+Import codes / validation from `@heysutton/sdk`; Worker Response helpers from
+`@heysutton/sdk-server` (no re-exports between packages).
+
+## Request limits
 
 Every call from the app goes through Sutton's proxy, which enforces these limits:
 
 | Limit | Value | When exceeded |
 | --- | --- | --- |
-| Request body (Sutton API and backend) | 250KB of JSON | `413 PAYLOAD_TOO_LARGE` |
+| Request body (Sutton API and backend) | 250KB of JSON | `413 PAYLOAD_TOO_LARGE` (currently a 413 HTML page with no error code) |
 | Backend response size | 5MB | `502 BACKEND_RESPONSE_TOO_LARGE` |
 | Backend response time | 10s | `502 BACKEND_UNAVAILABLE` |
 | Requests per user session | 60 per minute | `429 RATE_LIMITED` |
@@ -143,14 +146,13 @@ Design for these limits from the start:
   used by many records is stored once. Records keep the key, not the file. Never put
   `data:` URLs or other file contents in D1 rows or in records that list routes return.
 - Shrink images in the browser before uploading (draw to a canvas at the size you need and
-  export WebP or JPEG), so each upload fits in one request.
+  export WebP or JPEG). Backend requests are JSON only, so the file travels base64-encoded,
+  which adds about a third: keep each exported image under about 180KB so the upload fits in
+  one request.
 - List routes return small summaries. Fetch a large record or file one at a time, by id, when
   it is needed.
 - Load data when a screen opens or the user acts. Don't poll on a timer, and don't refetch
   whole collections after every save.
-
-Import codes / validation from `@heysutton/sdk`; Worker Response helpers from
-`@heysutton/sdk-server` (no re-exports between packages).
 
 ## Sutton API from the backend
 
