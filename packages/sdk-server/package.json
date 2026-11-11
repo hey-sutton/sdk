@@ -1,6 +1,6 @@
 {
   "name": "@heysutton/sdk-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cloudflare Worker helpers for Sutton custom apps: handlers, env/secrets, jobs, webhooks, platform API",
   "license": "MIT",
   "type": "module",
@@ -30,7 +30,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@heysutton/sdk": "1.0.0"
+    "@heysutton/sdk": "1.1.0"
   },
   "devDependencies": {
     "typescript": "^7.0.2"
