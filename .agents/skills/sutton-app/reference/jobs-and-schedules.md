@@ -124,8 +124,8 @@ Run shape: `{ runId, name, kind, status, createdAt, startedAt, endedAt, result, 
 
 There is no local scheduler: `appJobs` throws MISSING_CONFIG under `wrangler dev` and
 `triggerJob` is never invoked. Keep handlers as plain exported functions (see
-`examples/full-featured/src/backend/jobs.js`) so you can unit-test them directly.
+`src/backend/jobs.js` in the `full-featured` template) so you can unit-test them directly.
 
-Working example: `examples/full-featured` — `manifest.json` (schedule),
+Working example: the `full-featured` template — `manifest.json` (schedule),
 `src/backend/jobs.js` (handlers), `src/backend/index.js` (submit/list routes),
 `src/frontend/panels/JobsPanel.tsx` (UI consuming them).

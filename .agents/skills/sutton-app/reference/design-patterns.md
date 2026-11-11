@@ -101,7 +101,7 @@ export function OrdersPage() {
   `graphql-schema://…`.
 - `rowCount` is the total across all pages; the pager depends on it.
 - Tabs that each have their own primary action: keep one `PageHeader` in the app shell and let
-  each tab's config supply its `actions` (see `examples/full-featured/src/frontend/App.tsx`).
+  each tab's config supply its `actions` (see `src/frontend/App.tsx` in the `full-featured` template).
 - One primary action, in the header. Bulk actions go in `selection.actions`. Row actions go in
   an overflow menu (see [Row and record actions](#row-and-record-actions)).
 - Saved views (Open / All, or the user's own) are `views`. Sibling datasets that are not the same

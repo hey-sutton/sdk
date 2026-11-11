@@ -9,7 +9,7 @@ from the source.
 
 Write or update it as part of the workflow (before `npm run pack`), not as an afterthought.
 
-In the publish zip, SPEC lives at `project/SPEC.md`. In a local clone it lives at the
+In the publish zip, SPEC lives at `project/SPEC.md`. On disk it lives at the
 app root next to `package.json`.
 
 ## What belongs in SPEC
@@ -46,14 +46,14 @@ decisions the user made mid-build.
 
 ## Example
 
-See [`examples/full-featured/SPEC.md`](../../../../examples/full-featured/SPEC.md) for a
-realistic builder-perspective SPEC.
+See `SPEC.md` in the `full-featured` template (`npx @heysutton/cli create scratch --template
+full-featured --no-install`) for a realistic builder-perspective SPEC.
 
 ## Local workspace vs Digit zip
 
 | Where | How the app is preserved |
 | --- | --- |
-| Local clone / agent workspace | Keep **source** under `apps/<name>` on disk (not build outputs) so later sessions can iterate. Local git commits are optional. Do not push or open PRs against this upstream starter. |
+| Local app folder / agent workspace | Keep the app's **source** on disk (not build outputs) so later sessions can iterate. In App Builder that's `apps/app`. Local git commits are optional. |
 | Published Digit app | `npm run pack` → `app.zip` (includes required `project/` source tree) |
 
 ### Keep in the workspace

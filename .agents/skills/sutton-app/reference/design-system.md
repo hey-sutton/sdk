@@ -163,8 +163,8 @@ coloured text.
 
 ## Icons
 
-Lucide, imported from `@heysutton/sdk-react` (see `packages/sdk-react/src/icons.ts` for the
-list; `Box`, `Link` and `Text` are exported as `BoxIcon`, `LinkIcon`, `TextIcon`). If you need one
+Lucide, imported from `@heysutton/sdk-react` (see `icons.ts` in the `@heysutton/sdk-react` package, or its type declarations under
+`node_modules/@heysutton/sdk-react/dist`, for the list; `Box`, `Link` and `Text` are exported as `BoxIcon`, `LinkIcon`, `TextIcon`). If you need one
 that is not exported, say so and name it.
 
 - **16** inline with 13px text, inside buttons, fields, menu items and tabs (the theme sizes icons

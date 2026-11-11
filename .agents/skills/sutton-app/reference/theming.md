@@ -9,7 +9,7 @@ HTML/CSS UI for new apps.
 
 ## Package
 
-[`@heysutton/sdk-react`](../../../../packages/sdk-react) implements the Sutton Figma design
+`@heysutton/sdk-react` implements the Sutton Figma design
 system as an MUI theme (palette, typography, component overrides), exported as `ThemeProvider`,
 plus the components that group themed parts. Use it as-is: don't copy its tokens into your app or
 build a second design system on top. It is self-contained: the private `digit-web` repo is
@@ -21,7 +21,7 @@ Depend on it from an app:
 ```json
 {
   "dependencies": {
-    "@heysutton/sdk-react": "file:../../packages/sdk-react",
+    "@heysutton/sdk-react": "^1.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^9.3.1",
@@ -30,12 +30,13 @@ Depend on it from an app:
   }
 }
 ```
-Use `file:../packages/sdk-react` when the app sits at the repo root (not under
-`examples/`).
+`sutton create` writes these for you. Apps created inside App Builder, or vendored with
+`sutton studio vendor`, link `file:./packages/sdk-react` instead; leave whichever form the app
+already uses.
 
 For Worker helpers (`createHandler`, `backendPath`, `ok`/`err`, `requireEnv`), depend on
-[`@heysutton/sdk-server`](../../../../packages/sdk-server). Bundling is handled by
-`@heysutton/cli` (`sutton studio pack`) — see `examples/full-featured`.
+`@heysutton/sdk-server`. Bundling is handled by `@heysutton/cli` (`sutton studio pack`). See the
+`full-featured` template.
 
 ## Provider
 

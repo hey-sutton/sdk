@@ -5,8 +5,8 @@ description: >-
   @heysutton/sdk-react, optional Cloudflare Worker backends via @heysutton/sdk-server,
   Vite IIFE bundles, manifest.json, Digit API proxy, env/secrets). Apps run in a
   locked-down sandboxed iframe (no popups, browser dialogs, clipboard read,
-  or device APIs). Use when creating a Digit app, editing an app in a local clone
-  of this starter, publishing via MCP, laying out screens, or when the user mentions
+  or device APIs). Use when creating a Digit app, editing an existing Sutton app,
+  publishing via MCP, laying out screens, or when the user mentions
   Sutton apps, manifest.json, AppProxy, ThemeProvider, /proxy/digit, /proxy/backend,
   settings panels, status pills, tables, checklists, chat boxes, or confirmation dialogs, or
   asks for an app to look like Sutton, match the design system, or match a Figma mockup.
@@ -39,7 +39,7 @@ stop and ask the user to connect the Digit tools before continuing.
 ## When to use
 
 - Creating a new Digit app from scratch
-- Adapting one of the `examples/` templates
+- Starting from a template (`npx @heysutton/cli templates`)
 - Declaring `manifest.json` permissions / backend
 - Calling the Digit GraphQL API from an app
 - Using app env vars or secrets (backend only)
@@ -69,7 +69,7 @@ Copy this checklist and track progress:
 
 ```
 Digit app progress:
-- [ ] 1. Use the starter's apps/app, or scaffold apps/<name> for an additional app
+- [ ] 1. Use the existing app (App Builder: apps/app), or create one with `npx @heysutton/cli create`
 - [ ] 2. Confirm the user created the app in Digit (get appId via apps)
 - [ ] 3. Implement frontend (React + MUI + ThemeProvider → #root)
 - [ ] 4. Add src/backend/ only if env/secrets or server logic needed
@@ -77,7 +77,7 @@ Digit app progress:
 - [ ] 6. Write root manifest.json (permissions[].key from appPermissions)
 - [ ] 7. Check manifest.permissions against appPermissions — confirm it covers every Digit API call the app makes
 - [ ] 8. Write/update SPEC.md
-- [ ] 9. npm run pack -w apps/<name> → app.zip
+- [ ] 9. npm run pack in the app folder → app.zip (App Builder: the harness's pack command)
 - [ ] 10. Deploy a draft (App Builder: `publishAppZip`; standalone MCP: `publishApp` with `channel: preview`)
 - [ ] 11. If the user explicitly asks to ship, promote the current draft from the Sutton web app
 - [ ] 12. Keep app source under apps/ — not build outputs; no upstream PRs
@@ -95,32 +95,35 @@ round trip per file is the slowest way to work through this.
 
 ### 1. Scaffold the app
 
-This repo is a single **npm workspace**. Apps live in `apps/<name>` — that depth is
-required, because apps depend on the libraries via `file:../../packages/*`.
+Every app is its own npm project: `manifest.json`, `package.json`, `SPEC.md`,
+`src/frontend/`, and `src/backend/` only when the app needs a Worker.
 
-The curated starter archive already contains `apps/app`, pre-scaffolded from the
-frontend-only `examples/hello-world` without build outputs. Use it when there is no
-retained publish. Add `src/backend/` only when the app needs server-side functionality.
-If a retained publish is supplied, its `project/` tree replaces `apps/app` entirely.
-Run `new-app` only when adding another app workspace:
+- **Inside Sutton App Builder.** The workspace already holds the app at `apps/app`. A retained
+  publish's `project/` tree replaces it entirely. Follow the harness's install and pack commands
+  and don't run `create`.
+- **Anywhere else, with no app yet.** Create one with the Sutton CLI:
 
 ```bash
-npm install                     # once per clone, from the repo root
-npm run new-app -- my-app       # copies examples/full-featured → apps/my-app
+npx @heysutton/cli@latest templates                        # list the templates
+npx @heysutton/cli@latest create my-app --template hello-world
+cd my-app
+npm run pack                                                # writes app.zip
 ```
 
-`new-app` copies the template, renames the package, writes a `SPEC.md` stub, and re-runs
-`npm install` so the workspace links the new app. Trim what you don't need from the copy —
-do not invent a new project shape.
+`create` copies the template, renames the package, writes a `SPEC.md` stub and runs
+`npm install` (pass `--no-install` to skip it). `full-featured`, the default, covers theme,
+errors, Digit GraphQL (`useApiQuery`), public API, secrets, D1 via the Worker
+(`useBackendQuery` / `@heysutton/sdk-server`), and env config. `hello-world` is frontend-only.
+Add `src/backend/` only when the app needs server-side functionality. Trim what you don't need
+from the copy, and do not invent a new project shape.
 
-The template covers theme, errors, Digit GraphQL (`useApiQuery`), public API, secrets,
-D1 via the Worker (`useBackendQuery` / `@heysutton/sdk-server`), and env config. Keep the
-`@heysutton/cli` devDependency and `"pack": "sutton studio pack"` — do **not** add Vite
-configs, a local pack script, or a per-app `npm install`.
+**Reading a template.** The references below point at files in a template, such as
+"`src/backend/jobs.js` in the `full-featured` template". To read one, create a scratch copy with
+`npx @heysutton/cli@latest create scratch --template full-featured --no-install`, read it, then
+delete it.
 
-**Always install from the repo root.** `@heysutton/cli` is a `file:` link, so npm puts
-its build toolchain (Vite) in the root `node_modules`, not the app's. Running `npm install`
-only inside `apps/<name>` leaves Vite missing and `pack` fails.
+Keep the `@heysutton/cli` devDependency and `"pack": "sutton studio pack"`. Do **not** add Vite
+configs, a local pack script, or other build tooling: `sutton studio pack` owns the build.
 
 All apps share React + MUI + `@heysutton/sdk-react` and the same folder conventions.
 There is no local Sutton runtime draft (Worker, env/secrets, and D1 are platform-injected).
@@ -190,7 +193,7 @@ Edit `src/frontend` and `src/backend` only. Harness types come from `@heysutton/
 — no local `digit.d.ts`. Prefer data hooks over calling `window.AppProxy`.
 
 ```bash
-npm run pack -w apps/my-app     # from repo root → app.zip
+npm run pack                    # from the app folder → app.zip
 ```
 
 `app.zip` has root `manifest.json`, `frontend/` (+ `backend/` when declared), and
@@ -202,8 +205,10 @@ only; still upload the zip **unchanged**. Details:
 and carry their own vendored copies under `packages/lib-*`. They keep working as they are.
 Don't migrate them to `@heysutton/sdk*`, and don't mix the two names in one app: leave
 their `package.json` and imports on `@digit/lib-*` and pack them as usual.
-Some lack `packages/lib-common`; the starter's private `packages/lib-common` shim (re-exports
-`@heysutton/sdk`) resolves it, so don't copy or recreate it in the app.
+Some lack `packages/lib-common`. Inside App Builder the starter's `packages/lib-common` shim
+(it re-exports `@heysutton/sdk`) resolves it, so don't copy or recreate it in the app. Anywhere
+else, run `npx sutton studio vendor` once in the app folder, then `npm install`: it copies the
+shim into the app's `packages/`.
 
 ### 4. Frontend rules
 
@@ -425,12 +430,12 @@ Full steps: [reference/publish.md](reference/publish.md).
 ### 9. SPEC.md and local source
 
 Update `SPEC.md` before pack — iteration context for the next agent (purpose, why each
-permission/env exists, verbatim prompts, context supplied). Model:
-[`examples/full-featured/SPEC.md`](../../../examples/full-featured/SPEC.md).
+permission/env exists, verbatim prompts, context supplied). Model: `SPEC.md` in the
+`full-featured` template.
 Details: [reference/spec.md](reference/spec.md).
 
-Keep `apps/<name>/` source on disk. Do not commit build outputs or open PRs against this
-upstream starter.
+Keep the app's source on disk. Do not commit build outputs (`frontend/`, `backend/`,
+`app.zip`).
 
 ## Decision guide
 
@@ -473,7 +478,7 @@ Jobs/schedules: `createHandler({ jobs })` + `appJobs({ env })` —
 [reference/webhooks.md](reference/webhooks.md). SQL migrations are additive and forward-only:
 [reference/d1-migrations.md](reference/d1-migrations.md).
 
-See `examples/full-featured/src/backend/index.js` for the reference layout.
+See `src/backend/index.js` in the `full-featured` template for the reference layout.
 Proxy details: [reference/proxy-and-api.md](reference/proxy-and-api.md).
 
 ## Additional resources
@@ -494,4 +499,4 @@ Proxy details: [reference/proxy-and-api.md](reference/proxy-and-api.md).
 - [reference/publish.md](reference/publish.md) — draft/published deployment workflows and zip rules
 - [reference/draft-and-publish.md](reference/draft-and-publish.md) — channel behavior and draft safety
 - [reference/spec.md](reference/spec.md) — SPEC.md iteration context
-- [`packages/cli`](../../../packages/cli) — `sutton studio pack` shared tooling
+- `@heysutton/cli` — `sutton create`, `sutton templates`, `sutton studio pack` and `sutton studio vendor`

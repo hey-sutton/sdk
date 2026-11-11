@@ -104,8 +104,8 @@ and unverified traffic must never consume it. Use the provider's delivery id as 
 
 There is no local webhook ingress: `triggerWebhook` is never invoked under `wrangler dev`.
 Keep handlers as plain exported functions (see
-`examples/full-featured/src/backend/webhooks.js`) so you can unit-test them directly —
+`src/backend/webhooks.js` in the `full-featured` template) so you can unit-test them directly —
 `verifyWebhookSignature` runs anywhere WebCrypto exists.
 
-Working example: `examples/full-featured` — `manifest.json` (webhook declaration),
+Working example: the `full-featured` template — `manifest.json` (webhook declaration),
 `src/backend/webhooks.js` (signed note-created handler).

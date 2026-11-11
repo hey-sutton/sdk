@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "sutton",
   "displayName": "Sutton",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Sutton agent skills. The current skill, sutton-app, builds, drafts, and publishes Sutton Studio and custom apps.",
   "author": {
     "name": "Sutton"

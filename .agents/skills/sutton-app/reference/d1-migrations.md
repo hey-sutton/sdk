@@ -88,6 +88,6 @@ ALTER TABLE items DROP COLUMN title;
 
 ## What does not run migrations
 
-- Local dev in this starter repo (`npm run dev`)
+- Running the app locally (`npm run dev`)
 - Backend code at runtime (no auto-migrate on requests)
 - Config-only updates (env vars / secrets sync without a full deployment)
