@@ -32,7 +32,8 @@ the published app only. Nothing is copied from draft onto the published app for 
 ## What a draft does and does not test
 
 - Draft migrations run against the draft D1. Promotion applies the build's pending
-  migrations to the published D1; use backward-compatible expand/contract changes.
+  migrations to the published D1. Migrations are additive and forward-only: rollback runs
+  older code against the newer schema. See [d1-migrations.md](d1-migrations.md).
 - **Schedules run on the published app only.** Draft cron is not registered, so timer-driven behavior is
   not production-equivalent. On-demand jobs use the draft job namespace when invoked by
   the draft app.

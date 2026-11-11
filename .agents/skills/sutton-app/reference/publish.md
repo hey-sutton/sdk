@@ -100,7 +100,7 @@ must remain in the published zip so the app can be restored for a later iteratio
 Call `appPublish` with `appId` and `appPublishId` (the upload-link `id`) until the state is
 `succeeded` or `failed`. Intermediate states include `queued`, `validating`,
 `deployingBackend`, and `publishingBundle`. During `deployingBackend`, Digit applies pending
-migrations — see [d1-migrations.md](d1-migrations.md).
+migrations. They must be additive and forward-only — see [d1-migrations.md](d1-migrations.md).
 
 For a draft, a succeeded row means the owner can open the draft environment; it does not
 mean the published app changed. For a publish to the published app or a later promotion, the published app changes
@@ -119,6 +119,37 @@ stays on the promote row as an operator recovery aid.
 
 On failure, report the returned `error`, fix the app, repack, and start a fresh upload. Each
 upload is single-use.
+
+## Roll back to an earlier version
+
+Rolling back puts an earlier build's code back on the published app. It does not roll back the
+database.
+
+1. Ask the user which version to restore and get that build's publish id: the upload-link `id`
+   from the upload that shipped it. Only ids you kept from this session's uploads, or that the
+   user has from an earlier session's publish result, are known. If neither of you has it, stop
+   and tell the user. Do not guess an id. Call `appPublish` with that id to get its
+   `downloadUrl`, then GET the zip yourself. `downloadUrl` is null when no zip was kept for that
+   build, and then it can't be restored.
+2. Before you republish, check the migrations added since that version. If one drops or renames
+   a table or column the older code uses (a table rebuild counts, since it drops and renames
+   tables), adds a `UNIQUE` index, or rewrites values the older code reads, tell the user the
+   rollback will break the app and let them decide. Do this even when they asked to publish
+   straight to the published app.
+3. Republish that zip unchanged through the upload flow above: `generateAppUploadLink`, upload,
+   `publishApp`. Deploy it as a draft (`channel: "preview"`) so the user can check it and
+   promote it, unless they ask to publish it straight to the published app.
+
+Migrations only move forward. The earlier zip carries earlier migration files, which are already
+recorded as applied, so nothing runs and the published database keeps the newer schema. The
+older code then runs against that schema, which is why every migration must be
+[additive](d1-migrations.md#additive-only-migrations).
+
+For the next change after a rollback, the restored `project/` no longer has the newer migration
+files, but the published database still records them as applied. Keep those newer files in
+`src/backend/migrations/` (copy them from the newer build's zip or your source) and number new
+migrations after the highest one already applied. Never reuse an applied filename: Digit skips
+it without running the new SQL.
 
 ## Zip validation reminders
 

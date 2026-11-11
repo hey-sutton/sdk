@@ -470,7 +470,7 @@ it acts as the requesting user, and jobs/schedules/webhooks have no Sutton API f
 Jobs/schedules: `createHandler({ jobs })` + `appJobs({ env })` —
 [reference/jobs-and-schedules.md](reference/jobs-and-schedules.md). Webhooks:
 `createHandler({ webhooks })`, verify with `verifyWebhookSignature` before acting —
-[reference/webhooks.md](reference/webhooks.md). SQL migrations:
+[reference/webhooks.md](reference/webhooks.md). SQL migrations are additive and forward-only:
 [reference/d1-migrations.md](reference/d1-migrations.md).
 
 See `examples/full-featured/src/backend/index.js` for the reference layout.
@@ -490,7 +490,7 @@ Proxy details: [reference/proxy-and-api.md](reference/proxy-and-api.md).
 - [reference/backend-env-secrets.md](reference/backend-env-secrets.md) — env/secrets in Workers
 - [reference/jobs-and-schedules.md](reference/jobs-and-schedules.md) — jobs, schedules, DIGIT_JOBS
 - [reference/webhooks.md](reference/webhooks.md) — inbound webhooks, signature verification
-- [reference/d1-migrations.md](reference/d1-migrations.md) — database SQL applied on publish
+- [reference/d1-migrations.md](reference/d1-migrations.md) — forward-only additive D1 SQL, applied on deploy
 - [reference/publish.md](reference/publish.md) — draft/published deployment workflows and zip rules
 - [reference/draft-and-publish.md](reference/draft-and-publish.md) — channel behavior and draft safety
 - [reference/spec.md](reference/spec.md) — SPEC.md iteration context
