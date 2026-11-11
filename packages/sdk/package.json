@@ -1,6 +1,6 @@
 {
   "name": "@heysutton/sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Shared error codes, result types, and validation for Sutton custom apps",
   "license": "MIT",
   "type": "module",

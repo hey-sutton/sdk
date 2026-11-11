@@ -1,6 +1,6 @@
 {
   "name": "@heysutton/sdk-react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React host bridge, API hooks, theme, labels, and error UI for Sutton custom apps",
   "license": "MIT",
   "type": "module",
@@ -36,7 +36,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@heysutton/sdk": "1.0.0",
+    "@heysutton/sdk": "1.1.0",
     "@mui/x-data-grid": "^9.15.0",
     "inter-ui": "4.1.1",
     "lucide-react": "^1.57.0"
