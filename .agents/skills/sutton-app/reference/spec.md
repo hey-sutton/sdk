@@ -41,7 +41,7 @@ add a one-line note before it, but keep the prompt text unedited.
 ### Context supplied
 
 Anything beyond the prompts that shaped the result: example app copied from, screenshots
-or mockups, tickets/docs, an existing Digit object used as a model, schema notes, product
+or mockups, tickets/docs, an existing Sutton object used as a model, schema notes, product
 decisions the user made mid-build.
 
 ## Example
@@ -49,12 +49,12 @@ decisions the user made mid-build.
 See `SPEC.md` in the `full-featured` template (`npx @heysutton/cli create scratch --template
 full-featured --no-install`) for a realistic builder-perspective SPEC.
 
-## Local workspace vs Digit zip
+## Local workspace vs Sutton zip
 
 | Where | How the app is preserved |
 | --- | --- |
 | Local app folder / agent workspace | Keep the app's **source** on disk (not build outputs) so later sessions can iterate. In App Builder that's `apps/app`. Local git commits are optional. |
-| Published Digit app | `npm run pack` → `app.zip` (includes required `project/` source tree) |
+| Published Sutton app | `npm run pack` → `app.zip` (includes required `project/` source tree) |
 
 ### Keep in the workspace
 
@@ -70,7 +70,7 @@ full-featured --no-install`) for a realistic builder-perspective SPEC.
 - Per-app Vite configs or `scripts/pack.sh` — owned by `@heysutton/cli`
 - `node_modules/`
 - `.vite/`
-- `*.zip` (`npm run pack` creates `app.zip` for Digit upload only)
+- `*.zip` (`npm run pack` creates `app.zip` for Sutton upload only)
 
 ### Workflow
 

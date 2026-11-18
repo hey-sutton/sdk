@@ -1,7 +1,7 @@
-# Proxy and Digit API
+# Proxy and Sutton API
 
 Apps run on a per-app origin. The only egress the frontend CSP allows is same-origin, so
-Digit data and app backends are reached through Digit-hosted proxies.
+Sutton data and app backends are reached through Sutton-hosted proxies.
 
 Prefer the React hooks from `@heysutton/sdk-react` — they wrap the harness client and
 normalize errors for `AppErrorAlert`. The package’s public data API is **hooks only**
@@ -9,7 +9,7 @@ normalize errors for `AppErrorAlert`. The package’s public data API is **hooks
 
 ## Look up the GraphQL schema (required)
 
-Digit MCP is required. When writing or changing Digit GraphQL operations, use these MCP
+Sutton MCP is required. When writing or changing Sutton GraphQL operations, use these MCP
 **resources** — do **not** invent field or type names, and do **not** load the full schema
 into context:
 
@@ -73,14 +73,14 @@ item on an order or project, say), pass their ids to the list query's id filter,
 id filter as `items(itemIds?)`, and each single-record query names the list query to use.
 Single-record queries are for one record's full details. See [Request limits](#request-limits).
 
-## Digit GraphQL API
+## Sutton GraphQL API
 
 `useApiQuery` / `useApiMutation` POST `/proxy/digit` with
 `credentials: 'include'` and `X-Digit-Proxy-Client: 1`.
 
 - Credentials stay server-side (HttpOnly session cookie + scoped token in Redis)
 - Your query must be covered by `manifest.permissions` ∩ the user's live permissions
-- Do **not** call Digit GraphQL with a bearer token from app JS
+- Do **not** call Sutton GraphQL with a bearer token from app JS
 - Do **not** invent a different proxy URL
 
 On a draft Host, Sutton GraphQL reads and writes use the viewer's permissions, still

@@ -104,15 +104,15 @@ Do not hand-roll `/proxy/backend` fetches without `X-Digit-Proxy-Client` (the ho
 | Situation | Backend required? |
 | --- | --- |
 | Pure UI | No |
-| Digit GraphQL via `useApiQuery` / `AppProxy` | No |
-| Read non-secret config from Digit app settings | Yes |
+| Sutton GraphQL via `useApiQuery` / `AppProxy` | No |
+| Read non-secret config from Sutton app settings | Yes |
 | Call third-party APIs with secrets | Yes |
 | App-own persistence (D1) | Yes (`backend.d1`) |
 | App-own file/blob storage (R2) | Yes (a `"bucket"` binding) |
 
 ## Setup for users
 
-1. Create the app in Digit
+1. Create the app in Sutton
 2. Set env vars / secrets in Sutton Settings (published values; draft uses them too)
 3. Publish a bundle whose manifest declares `backend.kind: "cloudflare-worker"`
 4. Ship `backend/index.js` that reads those keys via `requireEnv` inside `createHandler`

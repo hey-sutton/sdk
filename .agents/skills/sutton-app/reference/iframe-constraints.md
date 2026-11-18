@@ -1,6 +1,6 @@
 # Iframe constraints
 
-Digit apps run inside a **sandboxed iframe** in the Digit host. Design and implement
+Sutton apps run inside a **sandboxed iframe** in the Sutton host. Design and implement
 only what that environment allows. Do not add direct downloads, new tabs, browser dialogs,
 device APIs, or anything that escapes the frame. Host-mediated downloads and printing
 are the exceptions described below.
@@ -37,7 +37,7 @@ always intercept and post JSON.
 | `window.open`, `target="_blank"`, “Open in new tab”                        | No `allow-popups`                                                                         |
 | `alert` / `confirm` / `prompt`                                             | No `allow-modals`                                                                         |
 | Native HTML form submission (no `preventDefault`)                          | Navigates the frame to a proxy error — always `onSubmit` + `preventDefault` + fetch/hooks |
-| Navigating the parent Digit page (`top.location`, etc.)                    | No top-navigation flags — ask the host instead (`getHostCapabilities`)                    |
+| Navigating the parent Sutton page (`top.location`, etc.)                    | No top-navigation flags — ask the host instead (`getHostCapabilities`)                    |
 | Fullscreen API                                                             | `fullscreen 'none'`                                                                       |
 | Reading the clipboard (`navigator.clipboard.read*`, paste APIs)            | `clipboard-read 'none'`                                                                   |
 | Camera, mic, geolocation, USB, WebAuthn get, payment, PiP, wake lock, etc. | Permissions Policy `'none'` — the host may offer it instead (e.g. scanning, see `getHostCapabilities`) |
@@ -52,7 +52,7 @@ host can do some of these on the app's behalf (scanning, for example).
 - SPA navigation and in-iframe links (same document / React Router-style)
 - MUI **Dialog**, Drawer, Menu, Popover, Snackbar — these are in-page overlays, not
   browser `window.alert`-style modals
-- Digit proxies and hooks (`useApiQuery`, `useBackendQuery`, …)
+- Sutton proxies and hooks (`useApiQuery`, `useBackendQuery`, …)
 - Forms with `onSubmit` + `preventDefault`, posting JSON via fetch/hooks
 - “Copy” buttons via `navigator.clipboard.writeText(...)` inside a click handler
 - File exports via `AppHost.invoke("download", { filename, contentType, data })` — the host
@@ -67,7 +67,7 @@ host can do some of these on the app's behalf (scanning, for example).
   HTML and opens the print dialog from its own frame. The app iframe never receives
   `allow-modals`
 - Anything else the host offers through `AppHost.invoke` — call `getHostCapabilities` for the
-  live list; it is the only place that knows what this Digit supports
+  live list; it is the only place that knows what this Sutton version supports
 
 `window.DigitHost`, including its `download(...)` and `print(...)`, is deprecated. It still
 works, so an app that uses it is not broken — but write new code against `AppHost.invoke`, and

@@ -1,11 +1,11 @@
 # manifest.json
 
 **Source:** keep `manifest.json` at the **app project root** (next to `package.json`) —
-it is Digit publish config, not a Vite static asset.
+it is Sutton publish config, not a Vite static asset.
 
 **Publish zip:** required at the **zip root**, sibling of `frontend/` and `backend/`.
 `sutton studio pack` (`@heysutton/cli`) stages the root file there. Validated at publish
-time. Not uploaded to the serving bucket as-is — Digit snapshots it onto the publish row
+time. Not uploaded to the serving bucket as-is — Sutton snapshots it onto the publish row
 and derives `active.json` / bundle assets from it.
 
 ## Schema
@@ -35,9 +35,9 @@ type AppManifest = {
 
 - Deployment channel is platform state, not manifest configuration. Do not add a `preview` or
   `live` flag to the manifest; the same packed artifact can be deployed as a draft and later promoted.
-- `permissions` must be an array of known Digit permission **`key`** strings from MCP
+- `permissions` must be an array of known Sutton permission **`key`** strings from MCP
   **`appPermissions`** — never invent strings (see [permissions.md](permissions.md))
-- `build` is stamped by `sutton studio pack` so Digit can tell which starter release a published
+- `build` is stamped by `sutton studio pack` so Sutton can tell which starter release a published
   app came from. Never hand-write it — re-pack instead
 - If `backend` is present, the zip **must** include `backend/index.js`
 - If the zip includes `backend/` files but the manifest has no `backend` block → reject
@@ -73,7 +73,7 @@ Frontend-only:
 }
 ```
 
-Digit API + Worker + D1 + an hourly schedule (permission keys come from `appPermissions` —
+Sutton API + Worker + D1 + an hourly schedule (permission keys come from `appPermissions` —
 `READ_ITEM` / `READ_INVENTORY` here match the full-featured example):
 
 ```json
@@ -92,11 +92,11 @@ Digit API + Worker + D1 + an hourly schedule (permission keys come from `appPerm
 Produced by `sutton studio pack`. Upload that zip **unchanged**.
 
 ```
-manifest.json            # zip root — Digit publish config
-frontend/                # Digit deploy — required
+manifest.json            # zip root — Sutton publish config
+frontend/                # Sutton deploy — required
   index.js               # the entry, by convention
   assets/                # self-hosted Inter (.woff2); served at /app/assets/
-backend/                 # Digit deploy — when manifest.backend is set
+backend/                 # Sutton deploy — when manifest.backend is set
   index.js               # single-file Worker ESM, by convention
   migrations/
     0001_init.sql

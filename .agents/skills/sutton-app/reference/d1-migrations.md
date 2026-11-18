@@ -1,6 +1,6 @@
 # Database migrations
 
-Digit applies `backend/migrations/*.sql` during a platform deployment — not when the app
+Sutton applies `backend/migrations/*.sql` during a platform deployment — not when the app
 handles requests, not during local dev, and not as a separate manual step. A draft deploy
 applies migrations to the draft D1. Promotion applies the build's pending migrations to the
 published D1; a draft deploy never migrates published data.
@@ -16,10 +16,10 @@ published D1; a draft deploy never migrates published data.
 **Completing the platform deployment is what runs migrations.** Uploading a zip without
 completing the deployment does not apply any SQL.
 
-## How Digit applies them
+## How Sutton applies them
 
 - Files run in **filename order** (lexicographic — zero-padding keeps order correct)
-- Digit records which filenames have already been applied separately in each D1 and **skips**
+- Sutton records which filenames have already been applied separately in each D1 and **skips**
   them on later deployments to that channel
 - The first draft deploy and the first published deployment each run every migration file for
   their own database
@@ -27,7 +27,7 @@ completing the deployment does not apply any SQL.
 
 ## Rules
 
-- **Never edit or delete a migration file that has already been applied** on a channel. Digit
+- **Never edit or delete a migration file that has already been applied** on a channel. Sutton
   will not re-run it in that D1. To change the schema or fix a bad migration, **add a new
   forward file** with the next number (`0003_…`, `0004_…`). Do not write down or undo SQL
   files. If a migration was edited while developing only in draft, reset/replay the draft
@@ -38,9 +38,9 @@ completing the deployment does not apply any SQL.
 - Migrations are **additive and forward-only**. Rollback runs older code against the newer
   schema. See [Additive-only migrations](#additive-only-migrations).
 - If a published-app migration cannot capture a D1 Time Travel bookmark, promotion **fails
-  closed** and does not migrate — see [publish.md](publish.md). Digit does not auto-restore
+  closed** and does not migrate — see [publish.md](publish.md). Sutton does not auto-restore
   from that bookmark if a later step fails.
-- If a migration fails partway through, fix the SQL and **publish again**. Digit retries
+- If a migration fails partway through, fix the SQL and **publish again**. Sutton retries
   files that have not yet been recorded as successfully applied. Once a file is recorded as
   applied, leave it alone and add a new forward file instead.
 

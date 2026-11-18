@@ -1,16 +1,16 @@
-# Deploy a Digit app
+# Deploy a Sutton app
 
 Requires the org `CUSTOM_APPS` feature flag and `publish:app` permission. If either is
-missing, stop — there is no alternate publish path. Digit MCP is required for the standalone
+missing, stop — there is no alternate publish path. Sutton MCP is required for the standalone
 upload workflow below.
 
-Packing is local; the Digit platform performs the deployment. There is no local Digit runtime
+Packing is local; the Sutton platform performs the deployment. There is no local Sutton runtime
 draft because Workers, env/secrets, D1, and R2 are injected by the platform. The same
 channel-neutral `app.zip` can be deployed to draft and later promoted to the published app.
 
 ## Choose the workflow
 
-### Digit App Builder
+### Sutton App Builder
 
 The builder's `publishAppZip` tool owns upload, draft deployment, and polling:
 
@@ -27,7 +27,7 @@ production.
 
 ### Standalone MCP
 
-Standalone agents and scripts use the upload-link flow. Digit MCP is required for this
+Standalone agents and scripts use the upload-link flow. Sutton MCP is required for this
 workflow.
 
 ```text
@@ -39,20 +39,20 @@ workflow.
 ```
 
 Call MCP `apps`. Match by `name`. Use the returned `id` as `appId`. If the app does not
-exist, stop and ask the user to create it in Digit.
+exist, stop and ask the user to create it in Sutton.
 
 `publishApp` accepts `channel: "preview" | "live"`. Use `channel: "preview"` when testing
 without changing production. If `channel` is omitted, it defaults to `live` for backwards
-compatibility with existing callers. Promotion is currently an explicit Digit web action;
+compatibility with existing callers. Promotion is currently an explicit Sutton web action;
 do not assume a draft is published just because its `appPublish` row succeeded.
 
 ## Prerequisites
 
 1. The user has **created the app in Digit** (UI). Deployment never creates apps — there are
    no MCP tools to create, update, or delete apps. If the app does not exist, stop and ask
-   the user to create it in Digit.
+   the user to create it in Sutton.
 2. You know the app `id` — resolve it with MCP `apps`, or use the builder's request context.
-   If the app does not exist, stop and ask the user to create it in Digit.
+   If the app does not exist, stop and ask the user to create it in Sutton.
 3. GraphQL operations were checked against `graphql-schema://…`, and
    `manifest.permissions` contains the `key` values returned by `appPermissions`.
 4. `app.zip` is ready via `npm run pack` (`sutton studio pack` from `@heysutton/cli`).
@@ -92,14 +92,14 @@ app.zip
 └── project/                  # required — source, SPEC, vendored @heysutton/sdk*
 ```
 
-Do not modify the zip after packing. Digit deploys `frontend/` and `backend/`; `project/`
+Do not modify the zip after packing. Sutton deploys `frontend/` and `backend/`; `project/`
 must remain in the published zip so the app can be restored for a later iteration.
 
 ## Polling and failures
 
 Call `appPublish` with `appId` and `appPublishId` (the upload-link `id`) until the state is
 `succeeded` or `failed`. Intermediate states include `queued`, `validating`,
-`deployingBackend`, and `publishingBundle`. During `deployingBackend`, Digit applies pending
+`deployingBackend`, and `publishingBundle`. During `deployingBackend`, Sutton applies pending
 migrations. They must be additive and forward-only — see [d1-migrations.md](d1-migrations.md).
 
 For a draft, a succeeded row means the owner can open the draft environment; it does not
@@ -148,7 +148,7 @@ older code then runs against that schema, which is why every migration must be
 For the next change after a rollback, the restored `project/` no longer has the newer migration
 files, but the published database still records them as applied. Keep those newer files in
 `src/backend/migrations/` (copy them from the newer build's zip or your source) and number new
-migrations after the highest one already applied. Never reuse an applied filename: Digit skips
+migrations after the highest one already applied. Never reuse an applied filename: Sutton skips
 it without running the new SQL.
 
 ## Zip validation reminders

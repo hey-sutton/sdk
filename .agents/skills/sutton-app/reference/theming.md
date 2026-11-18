@@ -1,6 +1,6 @@
 # Theming
 
-Digit apps should look like Digit. Use **one stack only**:
+Sutton apps should look like Sutton. Use **one stack only**:
 
 **React + MUI + `@heysutton/sdk-react` (`ThemeProvider`)**
 
@@ -12,8 +12,7 @@ HTML/CSS UI for new apps.
 `@heysutton/sdk-react` implements the Sutton Figma design
 system as an MUI theme (palette, typography, component overrides), exported as `ThemeProvider`,
 plus the components that group themed parts. Use it as-is: don't copy its tokens into your app or
-build a second design system on top. It is self-contained: the private `digit-web` repo is
-**not** a dependency. Wrap the app in this `ThemeProvider`, not MUI's own `ThemeProvider` (it
+build a second design system on top. Wrap the app in this `ThemeProvider`, not MUI's own `ThemeProvider` (it
 already wraps MUI's). If a file needs MUI's too, import it under another name.
 
 Depend on it from an app:
