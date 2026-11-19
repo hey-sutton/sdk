@@ -156,7 +156,7 @@ Design for these limits from the start:
 
 ## Sutton API from the backend
 
-The backend `fetch` handler gets an `api` argument for Sutton GraphQL. Never ask the user for an API token,
+Every backend handler (`fetch`, jobs, schedules, webhooks) gets an `api` argument for Sutton GraphQL. Never ask the user for an API token,
 org id or anything similar: the platform brokers every call.
 
 ```js
@@ -171,8 +171,13 @@ export default createHandler({
 ```
 
 - Scope is `manifest.permissions`, exactly as for `/proxy/digit` — declare what the backend needs
-- It acts as **the user whose request it is serving**. Jobs, schedules and webhooks have no
-  Sutton API for now: do Sutton work in `fetch`, or pass the data a job needs in its payload
+- In `fetch` it acts as **the user whose request it is serving**. That user's access ends with
+  their request, so `ctx.waitUntil` work that outlives it should be a job instead
+- In jobs, schedules and webhooks it acts as **the app's bot**, a member of the org whose role
+  covers whatever `manifest.permissions` the person who last published it live could grant, at
+  that person's locations. Each live publish resets it
+- The bot only exists once a version is published live, and draft backends can't use it yet.
+  Until then `api.query` throws `BACKEND_IDENTITY_UNAVAILABLE`
 - Always use the `api` argument — never `env.__API`
 - Results come back as GraphQL `{ data, errors }` — check `errors`
 

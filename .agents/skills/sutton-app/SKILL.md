@@ -469,8 +469,8 @@ deprecated aliases; don't use them in new code.
 
 Always wrap with `createHandler`. Strip `/proxy/backend` via `backendPath`, match
 `method` + `path`, return `ok` / `err`. Prefer `requireEnv` over reading `env.KEY`.
-Sutton API: use the `api` argument `fetch` receives (`api.query(...)`) — never an API token;
-it acts as the requesting user, and jobs/schedules/webhooks have no Sutton API for now —
+Sutton API: use the `api` argument every handler receives (`api.query(...)`) — never an API
+token; in `fetch` it acts as the requesting user, in jobs/schedules/webhooks as the app's bot —
 [reference/proxy-and-api.md](reference/proxy-and-api.md#sutton-api-from-the-backend).
 Jobs/schedules: `createHandler({ jobs })` + `appJobs({ env })` —
 [reference/jobs-and-schedules.md](reference/jobs-and-schedules.md). Webhooks:

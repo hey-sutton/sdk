@@ -58,9 +58,10 @@ export default createHandler({
 });
 ```
 
-- Handler args: `{ path, method, query, headers, body, env, ctx }` — `body` is a
+- Handler args: `{ path, method, query, headers, body, env, ctx, api }` — `body` is a
   `Uint8Array` of the **exact bytes** the provider sent, `headers` are lower-cased,
   `query` is the raw query string (no leading `?`)
+- `api` calls Sutton as the app's bot — verify the signature before using it
 - Return `{ status, headers?, body? }` — this goes back to the provider verbatim, so
   provider challenge/echo handshakes work; non-2xx statuses generally make providers retry
 - Finish within the 10s delivery budget

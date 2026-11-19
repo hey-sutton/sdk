@@ -66,7 +66,9 @@ export default createHandler({
 ```
 
 - One handler per name — schedules AND submitted jobs share the map
-- Handler args: `{ name, kind: 'job' | 'schedule', runId, attempt, payload, deadlineMs, env, ctx }`
+- Handler args: `{ name, kind: 'job' | 'schedule', runId, attempt, payload, deadlineMs, env, ctx, api }`
+- `api` calls Sutton as the app's bot —
+  [proxy-and-api.md](proxy-and-api.md#sutton-api-from-the-backend)
 - The **return value** (JSON-serialisable) is stored as the run's `result`
 - A **throw** fails the attempt; the platform retries (up to 3 attempts per run)
 - Finish within `deadlineMs` (30s budget per invocation) — long work must be chunked
