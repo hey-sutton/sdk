@@ -29,9 +29,9 @@ Depend on it from an app:
   }
 }
 ```
-`sutton create` writes these for you. Apps created inside App Builder, or vendored with
-`sutton studio vendor`, link `file:./packages/sdk-react` instead; leave whichever form the app
-already uses.
+`sutton create` writes these for you, and `sutton studio pack` pins the installed versions
+exactly. Older apps link `file:./packages/sdk-react` instead; move them with `sutton upgrade`
+(see [Keeping the SDK current](../SKILL.md#3-project-layout)) rather than editing the link.
 
 For Worker helpers (`createHandler`, `backendPath`, `ok`/`err`, `requireEnv`), depend on
 `@heysutton/sdk-server`. Bundling is handled by `@heysutton/cli` (`sutton studio pack`). See the

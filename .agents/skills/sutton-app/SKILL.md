@@ -104,8 +104,8 @@ Every app is its own npm project: `manifest.json`, `package.json`, `SPEC.md`,
 - **Anywhere else, with no app yet.** Create one with the Sutton CLI:
 
 ```bash
-npx @heysutton/cli@latest templates                        # list the templates
-npx @heysutton/cli@latest create my-app --template hello-world
+npx -y -p @heysutton/cli@latest sutton templates   # list the templates
+npx -y -p @heysutton/cli@latest sutton create my-app --template hello-world
 cd my-app
 npm run pack                                                # writes app.zip
 ```
@@ -119,7 +119,7 @@ from the copy, and do not invent a new project shape.
 
 **Reading a template.** The references below point at files in a template, such as
 "`src/backend/jobs.js` in the `full-featured` template". To read one, create a scratch copy with
-`npx @heysutton/cli@latest create scratch --template full-featured --no-install`, read it, then
+`npx -y -p @heysutton/cli@latest sutton create scratch --template full-featured --no-install`, read it, then
 delete it.
 
 Keep the `@heysutton/cli` devDependency and `"pack": "sutton studio pack"`. Do **not** add Vite
@@ -197,18 +197,38 @@ npm run pack                    # from the app folder → app.zip
 ```
 
 `app.zip` has root `manifest.json`, `frontend/` (+ `backend/` when declared), and
-`project/` (source + vendored `@heysutton/sdk*`). Sutton deploys `frontend/` / `backend/`
+`project/` (source, with `@heysutton/*` pinned in `package.json`). Sutton deploys `frontend/` / `backend/`
 only; still upload the zip **unchanged**. Details:
 [reference/manifest.md](reference/manifest.md), [reference/publish.md](reference/publish.md).
 
-**Older apps on `@digit/lib-*`.** Apps packed before the SDK rename import `@digit/lib-*`
-and carry their own vendored copies under `packages/lib-*`. They keep working as they are.
-Don't migrate them to `@heysutton/sdk*`, and don't mix the two names in one app: leave
-their `package.json` and imports on `@digit/lib-*` and pack them as usual.
-Some lack `packages/lib-common`. Inside App Builder the starter's `packages/lib-common` shim
-(it re-exports `@heysutton/sdk`) resolves it, so don't copy or recreate it in the app. Anywhere
-else, run `npx sutton studio vendor` once in the app folder, then `npm install`: it copies the
-shim into the app's `packages/`.
+**Keeping the SDK current.** An app pins exact `@heysutton/*` versions in `package.json`, and a
+reinstall gets those same versions from npm, so the app stays on them until you upgrade it.
+Older apps carry their own copies under `packages/` instead, and the oldest import
+`@digit/lib-*`. Those keep working and pack as they are until upgraded.
+
+When you start work on an existing app, check its SDK from the app folder (`apps/app` in App
+Builder, never the workspace root):
+
+```bash
+npx -y -p @heysutton/cli@latest sutton upgrade --check
+```
+
+If it's behind, upgrade before making the user's change, and say so in one line. Ask first,
+explaining why, for a new major version or an app on `@digit/lib-*` (its look can change);
+otherwise just do it. Always upgrade when the task needs something the app's version lacks.
+
+1. `npx -y -p @heysutton/cli@latest sutton upgrade` from the app folder. It moves every `@heysutton/*`
+   package to the latest version together, renames `@digit/lib-*` dependencies and imports, and
+   removes vendored copies. Don't bump the packages one by one.
+2. `npm install` (inside App Builder, from the workspace root).
+3. Apply every note in [reference/upgrading.md](reference/upgrading.md) whose condition matches
+   the app.
+4. Pack and check the app still works in its preview, then make the user's change, so a
+   regression from the upgrade isn't mixed up with your own.
+
+If the user declines, leave the app as it is: don't mix the old and new names in one app. An
+app still on `@digit/lib-*` without `packages/lib-common` resolves it from the starter's shim
+inside App Builder; anywhere else, run `npx sutton studio vendor` once, then `npm install`.
 
 ### 4. Frontend rules
 
@@ -499,4 +519,5 @@ Proxy details: [reference/proxy-and-api.md](reference/proxy-and-api.md).
 - [reference/publish.md](reference/publish.md) — draft/published deployment workflows and zip rules
 - [reference/draft-and-publish.md](reference/draft-and-publish.md) — channel behavior and draft safety
 - [reference/spec.md](reference/spec.md) — SPEC.md iteration context
-- `@heysutton/cli` — `sutton create`, `sutton templates`, `sutton studio pack` and `sutton studio vendor`
+- [reference/upgrading.md](reference/upgrading.md) — what to change when upgrading an app's SDK
+- `@heysutton/cli` — `sutton create`, `sutton templates`, `sutton studio pack`, `sutton studio vendor` and `sutton upgrade`

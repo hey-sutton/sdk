@@ -89,7 +89,7 @@ app.zip
 ├── backend/                  # when manifest.backend is set
 │   ├── index.js
 │   └── migrations/
-└── project/                  # required — source, SPEC, vendored @heysutton/sdk*
+└── project/                  # required — source, SPEC, package.json (+ lockfile)
 ```
 
 Do not modify the zip after packing. Sutton deploys `frontend/` and `backend/`; `project/`
@@ -155,7 +155,7 @@ it without running the new SQL.
 
 - `manifest.json` at the zip root and `frontend/index.js`
 - When `manifest.backend` is set: `backend/index.js`
-- `project/` with source, `SPEC.md`, and vendored `@heysutton/sdk*` including `@heysutton/cli`
+- `project/` with source, `SPEC.md` and `package.json` (older apps also carry vendored packages under `project/packages/`)
 - `manifest.permissions` are **`key`** values from `appPermissions`
 
 See [draft-and-publish.md](draft-and-publish.md) for channel isolation, migrations,

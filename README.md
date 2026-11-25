@@ -16,8 +16,8 @@ Installed copies update when the plugin version changes.
 ## Build an app
 
 ```bash
-npx @heysutton/cli@latest templates
-npx @heysutton/cli@latest create my-app --template hello-world
+npx -y -p @heysutton/cli@latest sutton templates
+npx -y -p @heysutton/cli@latest sutton create my-app --template hello-world
 cd my-app
 npm run pack        # writes app.zip
 ```

@@ -104,7 +104,7 @@ project/                 # required in the zip — source, SPEC, tooling (not de
   src/
   SPEC.md
   package.json
-  packages/              # vendored @heysutton/sdk* (+ cli)
+  package-lock.json      # when the app has one
 ```
 
 Max zip size: **10MB**. Do not strip `project/` or rebuild the archive by hand.
